@@ -50,9 +50,12 @@ namespace Eclipse.Player
 
         private void FixedUpdate()
         {
+            Vector2 movementInput =
+                Vector2.ClampMagnitude(moveInput, 1f);
+
             Vector2 nextPosition =
                 body.position +
-                moveInput * moveSpeed * Time.fixedDeltaTime;
+                movementInput * moveSpeed * Time.fixedDeltaTime;
 
             body.MovePosition(nextPosition);
         }
