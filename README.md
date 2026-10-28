@@ -35,3 +35,4 @@ Each task must satisfy its acceptance criteria before being merged into developm
 After every 10 tasks, a milestone checkpoint is performed before changes are promoted to main.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete development workflow.
+```
