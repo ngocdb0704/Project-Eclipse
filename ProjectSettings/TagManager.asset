@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
+  serializedVersion: 3
   tags: []
   layers:
   - Default
@@ -41,3 +41,29 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 1520260977
+    locked: 0
+  - name: Environment
+    uniqueID: 3684403735
+    locked: 0
+  - name: Pickup
+    uniqueID: 3641899031
+    locked: 0
+  - name: Enemy
+    uniqueID: 1323647355
+    locked: 0
+  - name: Player
+    uniqueID: 1184454663
+    locked: 0
+  - name: Projectile
+    uniqueID: 884795051
+    locked: 0
+  - name: VFX
+    uniqueID: 2441294095
+    locked: 0
+  - name: UI
+    uniqueID: 4030905545
+    locked: 0
+  m_RenderingLayers:
+  - Default
