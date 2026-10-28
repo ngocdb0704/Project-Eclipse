@@ -1,132 +1,55 @@
 # Contributing to Project Eclipse
 
-Project Eclipse follows a task-based Git workflow aligned with the project's development roadmap.
+Project Eclipse uses a task-based Git workflow. Start with the developer setup and repository layout in [README.md](README.md).
 
-## Branch Strategy
+## Branch strategy
 
-### `main`
+- `main` is the stable branch. Only verified milestone changes should be merged into it; feature development should not normally occur here.
+- `development` integrates completed tasks. A task is merged only after its acceptance criteria and the Definition of Done are verified.
+- `task/NNN-description` contains one roadmap task and is created from the latest `development`. Use a zero-padded task number and a short kebab-case description, for example `task/003-folder-structure`, `task/010-development-readme`, or `task/018-health-component`.
 
-`main` represents the stable state of the project.
+## Task workflow
 
-Only verified milestone changes should be merged into `main`.
+1. Update `development` and create the task branch from it.
+2. Implement only the task's defined scope; do not implement later roadmap work early.
+3. Verify every acceptance criterion and run the relevant tests.
+4. Confirm the project compiles and the Unity Console has no compile errors.
+5. Review the changed files and commit the task.
+6. Merge the completed task into `development` and delete the task branch when appropriate.
 
-Direct feature development should not normally occur on this branch.
+### Milestone checkpoints
 
-### `development`
+After every 10 tasks (for example, after Task 010), perform a milestone checkpoint before promoting `development` to `main`. At the checkpoint, verify the integrated milestone's acceptance criteria, compilation, relevant tests, scene flow, and changed files. Promote to `main` only when the checkpoint succeeds.
 
-`development` is the integration branch for completed development tasks.
+## Commit convention
 
-Individual task branches are merged into `development` after their acceptance criteria have been verified.
+Use concise Conventional Commit-style messages where practical:
 
-After a milestone checkpoint is completed successfully, `development` may be merged into `main`.
+```text
+chore: initialize Unity 2D URP project
+feat: implement player movement
+fix: reset pooled enemy health
+test: add damage calculation tests
+docs: document development workflow
+```
 
-### Task Branches
-
-Each roadmap task should normally use its own branch.
-
-Naming convention:
-
-`task/<task-number>-<short-description>`
-
-Examples:
-
-`task/003-folder-structure`
-
-`task/004-assembly-definitions`
-
-`task/018-health-component`
-
-Branches should be created from the latest `development` branch.
-
-## Development Workflow
-
-1. Update `development`.
-2. Create a branch for the current task.
-3. Implement only the scope defined by that task.
-4. Verify all acceptance criteria.
-5. Ensure Unity compiles without errors.
-6. Review the changed files.
-7. Commit the task.
-8. Merge the task branch into `development`.
-9. Delete the completed task branch when appropriate.
-
-Every 10 tasks, run the milestone checkpoint before promoting `development` to `main`.
-
-## Commit Convention
-
-Use concise Conventional Commit-style messages where practical.
-
-Examples:
-
-`chore: initialize Unity 2D URP project`
-
-`chore: create project folder structure`
-
-`feat: implement player movement`
-
-`feat: add enemy chase behavior`
-
-`fix: reset pooled enemy health`
-
-`test: add damage calculation tests`
-
-`docs: document development workflow`
-
-Recommended prefixes:
-
-- `feat:` — gameplay or product feature
-- `fix:` — bug fix
-- `chore:` — infrastructure or maintenance
-- `refactor:` — internal restructuring without behavior change
-- `test:` — tests
-- `docs:` — documentation
-- `perf:` — performance optimization
+Recommended prefixes are `feat:`, `fix:`, `chore:`, `refactor:`, `test:`, `docs:`, and `perf:`.
 
 ## Definition of Done
 
-A task is considered complete only when:
+A task is complete only when all applicable items below are true:
 
-- The project compiles successfully.
-- Unity Console contains no compile errors.
-- The task requirements are implemented.
-- All acceptance criteria are verified.
-- Existing functionality still works.
-- Files are located in the correct module/folder.
-- No unrelated refactoring was introduced.
+- The task requirements are implemented and every acceptance criterion is verified.
+- The project compiles successfully and the Unity Console contains no compile errors.
+- All tests required by the task pass, and existing functionality still works.
+- Files are in the correct module/folder and respect the existing assembly boundaries.
+- No unrelated refactoring or future roadmap functionality was introduced.
 - Gameplay configuration is not unnecessarily hard-coded.
 - Generated Unity folders are not committed.
-- Tests required by the task pass.
+- The final changed-file review contains only intended, task-scoped changes.
 
-## Unity Generated Files
+## Unity version and generated files
 
-The following directories must not be committed:
+Use Unity Editor `6000.3.27f1`, as defined by `ProjectSettings/ProjectVersion.txt`. Do not edit that file manually; Unity upgrades must be deliberate project-level changes.
 
-- `Library/`
-- `Temp/`
-- `Logs/`
-- `Obj/`
-- `Build/`
-- `Builds/`
-- `UserSettings/`
-
-The repository `.gitignore` contains the authoritative ignore rules.
-
-## Project Version
-
-Use the Unity Editor version defined by:
-
-`ProjectSettings/ProjectVersion.txt`
-
-Do not manually edit this file to change Unity versions.
-
-Unity version upgrades must be deliberate project-level changes.
-
-## Scope Discipline
-
-Each task should modify only files necessary for its requirements.
-
-Do not implement future roadmap tasks early simply because they are related.
-
-Avoid unrelated refactoring while completing a task.
-
-This keeps commits small, reviewable, and easy to revert.
+Do not commit generated directories such as `Library/`, `Temp/`, `Logs/`, `Obj/`, `Build/`, `Builds/`, or `UserSettings/`. The repository `.gitignore` is authoritative.

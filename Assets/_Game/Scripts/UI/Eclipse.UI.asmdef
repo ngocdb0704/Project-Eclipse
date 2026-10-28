@@ -1,0 +1,17 @@
+{
+  "name": "Eclipse.UI",
+  "rootNamespace": "Eclipse.UI",
+  "references": [
+    "Eclipse.Core",
+    "Eclipse.Gameplay"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

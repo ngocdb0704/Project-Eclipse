@@ -1,0 +1,23 @@
+{
+  "name": "Eclipse.Tests.EditMode",
+  "rootNamespace": "Eclipse.Tests.EditMode",
+  "references": [
+    "Eclipse.Core",
+    "Eclipse.Gameplay",
+    "Eclipse.UI"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}
