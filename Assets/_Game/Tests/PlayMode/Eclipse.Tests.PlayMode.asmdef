@@ -1,0 +1,21 @@
+{
+  "name": "Eclipse.Tests.PlayMode",
+  "rootNamespace": "Eclipse.Tests.PlayMode",
+  "references": [
+    "Eclipse.Core",
+    "Eclipse.Gameplay",
+    "Eclipse.UI"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false,
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}
