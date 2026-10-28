@@ -51,6 +51,40 @@ namespace Eclipse.Player
             ResetToDefaults();
         }
 
+        public PlayerStats(PlayerData data)
+        {
+            ResetFrom(data);
+        }
+
+        public void ResetFrom(PlayerData data)
+        {
+            if (data == null)
+            {
+                ResetToDefaults();
+                return;
+            }
+
+            MaxHealth = data.MaxHealth;
+            MoveSpeed = data.MoveSpeed;
+
+            DamageMultiplier = data.DamageMultiplier;
+            AttackSpeedMultiplier = data.AttackSpeedMultiplier;
+            CooldownReduction = data.CooldownReduction;
+
+            CriticalChance = data.CriticalChance;
+            CriticalDamage = data.CriticalDamage;
+
+            Armor = data.Armor;
+            PickupRadius = data.PickupRadius;
+
+            ProjectileCount = data.ProjectileCount;
+            ProjectileSpeed = data.ProjectileSpeed;
+            ProjectileSize = data.ProjectileSize;
+
+            DurationMultiplier = data.DurationMultiplier;
+            Luck = data.Luck;
+        }
+
         public void ResetToDefaults()
         {
             MaxHealth = DefaultMaxHealth;

@@ -169,5 +169,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2082dee3681469948ad7ee1a0adfa4c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Player.PlayerController
-  moveSpeed: 5
+  playerData: {fileID: 11400000, guid: de61056d00dc347459eebc377dde1e84, type: 2}
   moveAction: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

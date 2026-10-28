@@ -6,8 +6,10 @@ namespace Eclipse.Player
     [RequireComponent(typeof(Rigidbody2D))]
     public sealed class PlayerController : MonoBehaviour
     {
-        [SerializeField, Min(0f)]
-        private float moveSpeed = 5f;
+        [SerializeField]
+        private PlayerData playerData;
+
+        public PlayerStats Stats { get; private set; }
 
         [SerializeField]
         private InputActionReference moveAction;
@@ -18,6 +20,18 @@ namespace Eclipse.Player
         private void Awake()
         {
             body = GetComponent<Rigidbody2D>();
+
+            if (playerData == null)
+            {
+                Debug.LogError(
+                    "PlayerController requires PlayerData.",
+                    this);
+
+                enabled = false;
+                return;
+            }
+
+            Stats = new PlayerStats(playerData);
         }
 
         private void OnEnable()
@@ -55,7 +69,7 @@ namespace Eclipse.Player
 
             Vector2 nextPosition =
                 body.position +
-                movementInput * moveSpeed * Time.fixedDeltaTime;
+                movementInput * Stats.MoveSpeed * Time.fixedDeltaTime;
 
             body.MovePosition(nextPosition);
         }
