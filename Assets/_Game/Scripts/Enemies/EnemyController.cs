@@ -44,5 +44,20 @@ namespace Eclipse.Enemies
             health.Initialize(enemyData.MaxHP);
             movement.Initialize(enemyData.MoveSpeed);
         }
+
+        public void Initialize(Transform target)
+        {
+            if (target == null)
+            {
+                Debug.LogError(
+                    "EnemyController requires a chase target.",
+                    this);
+
+                movement.SetTarget(null);
+                return;
+            }
+
+            movement.SetTarget(target);
+        }
     }
 }
