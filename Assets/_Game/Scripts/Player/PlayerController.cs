@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Eclipse.Combat;
 
 namespace Eclipse.Player
 {
@@ -8,6 +9,13 @@ namespace Eclipse.Player
     {
         [SerializeField]
         private PlayerData playerData;
+
+        [SerializeField, Min(0f)]
+        private float invulnerabilityDuration = 0.5f;
+
+        private Health health;
+
+        public IHealth Health => health;
 
         public PlayerStats Stats { get; private set; }
 
@@ -32,6 +40,17 @@ namespace Eclipse.Player
             }
 
             Stats = new PlayerStats(playerData);
+
+            health = GetComponent<Health>();
+
+            if (health == null)
+            {
+                health = gameObject.AddComponent<Health>();
+            }
+
+            health.Initialize(Stats.MaxHealth);
+            health.ConfigureInvulnerability(
+                invulnerabilityDuration);
         }
 
         private void OnEnable()
