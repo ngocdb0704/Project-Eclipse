@@ -22,11 +22,22 @@ namespace Eclipse.Enemies
         public void Initialize(float moveSpeed)
         {
             MoveSpeed = Mathf.Max(0f, moveSpeed);
+            enabled = true;
         }
 
         public void SetTarget(Transform newTarget)
         {
             target = newTarget;
+        }
+
+        public void Stop()
+        {
+            target = null;
+
+            body.linearVelocity = Vector2.zero;
+            body.angularVelocity = 0f;
+
+            enabled = false;
         }
 
         private void FixedUpdate()

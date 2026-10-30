@@ -1,3 +1,4 @@
+using System;
 using Eclipse.Combat;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace Eclipse.Enemies
 
         private Health health;
         private EnemyMovement movement;
+        private Collider2D collisionCollider;
 
         private int playerLayer;
         private float nextContactDamageAttemptTime;
@@ -24,10 +26,15 @@ namespace Eclipse.Enemies
 
         public EnemyMovement Movement => movement;
 
+        public bool IsDead { get; private set; }
+
+        public event Action<EnemyController> Died;
+
         private void Awake()
         {
             health = GetComponent<Health>();
             movement = GetComponent<EnemyMovement>();
+            collisionCollider = GetComponent<Collider2D>();
 
             playerLayer = LayerMask.NameToLayer("Player");
 
@@ -35,6 +42,16 @@ namespace Eclipse.Enemies
             {
                 Debug.LogError(
                     "EnemyController requires EnemyData.",
+                    this);
+
+                enabled = false;
+                return;
+            }
+
+            if (collisionCollider == null)
+            {
+                Debug.LogError(
+                    "EnemyController requires Collider2D.",
                     this);
 
                 enabled = false;
@@ -51,6 +68,22 @@ namespace Eclipse.Enemies
             }
         }
 
+        private void OnEnable()
+        {
+            if (health != null)
+            {
+                health.Died += HandleDeath;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (health != null)
+            {
+                health.Died -= HandleDeath;
+            }
+        }
+
         private void Start()
         {
             if (!enabled)
@@ -58,12 +91,20 @@ namespace Eclipse.Enemies
                 return;
             }
 
+            IsDead = false;
+            nextContactDamageAttemptTime = 0f;
+
             health.Initialize(enemyData.MaxHP);
             movement.Initialize(enemyData.MoveSpeed);
         }
 
         public void Initialize(Transform target)
         {
+            if (IsDead)
+            {
+                return;
+            }
+
             if (target == null)
             {
                 Debug.LogError(
@@ -90,6 +131,7 @@ namespace Eclipse.Enemies
         private void TryApplyContactDamage(Collision2D collision)
         {
             if (!enabled ||
+                IsDead ||
                 enemyData == null ||
                 collision.gameObject.layer != playerLayer ||
                 Time.time < nextContactDamageAttemptTime)
@@ -109,6 +151,23 @@ namespace Eclipse.Enemies
                 Time.time + ContactDamageRetryInterval;
 
             targetHealth.TakeDamage(enemyData.Damage);
+        }
+
+        private void HandleDeath()
+        {
+            if (IsDead)
+            {
+                return;
+            }
+
+            IsDead = true;
+            nextContactDamageAttemptTime =
+                float.PositiveInfinity;
+
+            movement.Stop();
+            collisionCollider.enabled = false;
+
+            Died?.Invoke(this);
         }
     }
 }
