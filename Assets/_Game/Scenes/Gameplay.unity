@@ -348,7 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e4f5a3389c17d74085d66c43c527eab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Enemies.EnemySpawner
-  enemyPrefab: {fileID: 1344675368}
+  enemyPrefab: {fileID: 6650305006575240288, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
   spawnCamera: {fileID: 161694357}
   playerTarget: {fileID: 819455813}
   spawnParent: {fileID: 1059041380}
@@ -493,90 +493,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1344675366
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4606050086121473947, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_Size.x
-      value: 0.16
-      objectReference: {fileID: 0}
-    - target: {fileID: 4606050086121473947, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_Size.y
-      value: 0.16
-      objectReference: {fileID: 0}
-    - target: {fileID: 4606050086121473947, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-    - target: {fileID: 4606050086121473947, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5292000669548275257, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5292000669548275257, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5292000669548275257, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5292000669548275257, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5292000669548275257, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5292000669548275257, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5292000669548275257, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5292000669548275257, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5292000669548275257, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5292000669548275257, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8821361119707994947, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-      propertyPath: m_Name
-      value: BasicEnemy
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
---- !u!114 &1344675368 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6650305006575240288, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
-  m_PrefabInstance: {fileID: 1344675366}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2992b73428060d42bbb95dac1f83e0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Enemies.EnemyController
 --- !u!1 &2036860946
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,4 +586,3 @@ SceneRoots:
   - {fileID: 662115435}
   - {fileID: 1059041380}
   - {fileID: 1276771039}
-  - {fileID: 1344675366}
