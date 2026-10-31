@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2273751981772097556}
   - component: {fileID: 3657026695058552930}
   - component: {fileID: 3856034919320682648}
+  - component: {fileID: 7662397422168867168}
   m_Layer: 8
   m_Name: PlayerProjectile
   m_TagString: Untagged
@@ -156,3 +157,15 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.5
+--- !u!114 &7662397422168867168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2065590422889794817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 729e1005af74d3545947bb029c09675f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Combat.Projectile
