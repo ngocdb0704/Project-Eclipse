@@ -312,6 +312,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 662115435}
+  - component: {fileID: 662115437}
+  - component: {fileID: 662115436}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -334,6 +336,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &662115436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662115434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e4f5a3389c17d74085d66c43c527eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Enemies.EnemySpawner
+  enemyPrefab: {fileID: 6650305006575240288, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
+  spawnCamera: {fileID: 161694357}
+  playerTarget: {fileID: 819455813}
+  spawnParent: {fileID: 1059041380}
+  enemyRegistry: {fileID: 662115437}
+  spawnInterval: 1
+  spawnMargin: 2
+  randomSeed: 12345
+--- !u!114 &662115437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662115434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce5d502877b192149b61cb9717105fb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Enemies.EnemyRegistry
 --- !u!1001 &819455812
 PrefabInstance:
   m_ObjectHideFlags: 0
