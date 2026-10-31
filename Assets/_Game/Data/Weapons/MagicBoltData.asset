@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54edafe79969e2544b0c5b4f931ab25e, type: 3}
   m_Name: MagicBoltData
   m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Weapons.WeaponData
-  id: weapon
-  displayName: Weapon
+  id: magic_bolt
+  displayName: Magic Bolt
   icon: {fileID: 0}
   prefab: {fileID: 0}
   damage: 10
@@ -22,6 +22,6 @@ MonoBehaviour:
   projectileSpeed: 8
   projectileSize: 1
   pierce: 0
-  knockback: 0
+  knockback: 1
   maxLevel: 8
   weaponType: 0
