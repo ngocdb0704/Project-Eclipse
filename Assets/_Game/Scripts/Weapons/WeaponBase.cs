@@ -14,6 +14,8 @@ namespace Eclipse.Weapons
 
         public WeaponData Data => data;
 
+        protected PlayerStats RuntimeStats => playerStats;
+
         public bool IsInitialized { get; private set; }
 
         public float CooldownRemaining => cooldownRemaining;
