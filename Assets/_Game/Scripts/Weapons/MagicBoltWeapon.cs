@@ -4,6 +4,7 @@ using Eclipse.Enemies;
 using Eclipse.Player;
 using Eclipse.Weapons.Targeting;
 using UnityEngine;
+using Eclipse.Core.Pooling;
 
 namespace Eclipse.Weapons
 {
@@ -17,6 +18,12 @@ namespace Eclipse.Weapons
 
         private PlayerController owner;
         private EnemyRegistry enemyRegistry;
+
+        private const int ProjectilePoolPrewarmCount = 32;
+
+        private GameObjectPool<Projectile> projectilePool;
+
+        private Action<Projectile> projectileReleaseCallback;
 
         public void InitializeForPlayer(
             WeaponData weaponData,
@@ -50,6 +57,21 @@ namespace Eclipse.Weapons
             owner = player;
             enemyRegistry = registry;
 
+            if (projectilePool == null)
+            {
+                projectilePool =
+                    new GameObjectPool<Projectile>(
+                        projectilePrefab);
+
+                projectilePool.Prewarm(
+                    ProjectilePoolPrewarmCount);
+
+                projectileReleaseCallback =
+    ReleaseProjectile;
+            }
+
+
+
             transform.SetParent(
                 player.transform,
                 false);
@@ -57,6 +79,17 @@ namespace Eclipse.Weapons
             base.Initialize(
                 weaponData,
                 player.Stats);
+        }
+
+        private void ReleaseProjectile(
+    Projectile projectile)
+        {
+            if (!projectilePool.Release(projectile))
+            {
+                Debug.LogWarning(
+                    "Projectile release was rejected by its pool.",
+                    projectile);
+            }
         }
 
         private void Update()
@@ -137,16 +170,17 @@ namespace Eclipse.Weapons
                         DamageType.Magical);
 
                 Projectile projectile =
-                    Instantiate(
-                        projectilePrefab,
-                        origin,
-                        Quaternion.identity);
+    projectilePool.Get(
+        origin,
+        Quaternion.identity);
 
                 projectile.Initialize(
-                    direction,
-                    speed,
-                    projectileLifetime,
-                    context);
+    direction,
+    speed,
+    projectileLifetime,
+    context,
+    Data.Pierce,
+    projectileReleaseCallback);
             }
 
             return true;
