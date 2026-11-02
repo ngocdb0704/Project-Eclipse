@@ -1,8 +1,70 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Eclipse.Combat
 {
+    /// <summary>
+    /// Tracks unique damageable targets hit by one projectile.
+    ///
+    /// Pierce convention:
+    /// Pierce = 0 -> 1 total target.
+    /// Pierce = 1 -> 2 total targets.
+    /// Pierce = N -> N + 1 total targets.
+    /// </summary>
+    public sealed class ProjectileHitTracker
+    {
+        private readonly List<IDamageable> hitTargets =
+            new List<IDamageable>(4);
+
+        public int Pierce { get; private set; }
+
+        public int RemainingHits { get; private set; }
+
+        public void Reset(int pierce)
+        {
+            if (pierce < 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(pierce),
+                    "Pierce must be non-negative.");
+            }
+
+            Pierce = pierce;
+            RemainingHits = pierce + 1;
+
+            hitTargets.Clear();
+        }
+
+        public bool TryRegister(
+            IDamageable target)
+        {
+            if (target == null ||
+                RemainingHits <= 0)
+            {
+                return false;
+            }
+
+            for (int i = 0;
+                 i < hitTargets.Count;
+                 i++)
+            {
+                if (ReferenceEquals(
+                        hitTargets[i],
+                        target))
+                {
+                    return false;
+                }
+            }
+
+            hitTargets.Add(target);
+
+            RemainingHits--;
+
+            return true;
+        }
+    }
+
     [RequireComponent(typeof(Rigidbody2D))]
     public sealed class Projectile : MonoBehaviour
     {
@@ -12,7 +74,8 @@ namespace Eclipse.Combat
         private DamageContext damageContext;
         private Action<Projectile> releaseCallback;
 
-        private Collider2D lastHitCollider;
+        private readonly ProjectileHitTracker hitTracker =
+            new ProjectileHitTracker();
 
         private float remainingLifetime;
         private bool isInitialized;
@@ -25,6 +88,12 @@ namespace Eclipse.Combat
         public float RemainingLifetime =>
             remainingLifetime;
 
+        public int Pierce =>
+            hitTracker.Pierce;
+
+        public int RemainingHits =>
+            hitTracker.RemainingHits;
+
         public bool IsInitialized =>
             isInitialized;
 
@@ -34,7 +103,8 @@ namespace Eclipse.Combat
         private void Awake()
         {
             body = GetComponent<Rigidbody2D>();
-            projectileCollider = GetComponent<Collider2D>();
+            projectileCollider =
+                GetComponent<Collider2D>();
 
             if (projectileCollider == null)
             {
@@ -73,11 +143,32 @@ namespace Eclipse.Combat
             }
         }
 
+        /// <summary>
+        /// Backward-compatible initialization.
+        /// Pierce defaults to zero, meaning one total hit.
+        /// </summary>
         public void Initialize(
             Vector2 direction,
             float speed,
             float lifetime,
             DamageContext context,
+            Action<Projectile> onRelease = null)
+        {
+            Initialize(
+                direction,
+                speed,
+                lifetime,
+                context,
+                0,
+                onRelease);
+        }
+
+        public void Initialize(
+            Vector2 direction,
+            float speed,
+            float lifetime,
+            DamageContext context,
+            int pierce,
             Action<Projectile> onRelease = null)
         {
             if (!IsFinite(direction.x) ||
@@ -106,6 +197,8 @@ namespace Eclipse.Combat
                     "Lifetime must be finite and greater than zero.");
             }
 
+            hitTracker.Reset(pierce);
+
             Direction = direction.normalized;
             Speed = speed;
 
@@ -113,7 +206,6 @@ namespace Eclipse.Combat
             damageContext = context;
             releaseCallback = onRelease;
 
-            lastHitCollider = null;
             isReleased = false;
             isInitialized = true;
 
@@ -153,8 +245,7 @@ namespace Eclipse.Combat
         {
             if (!isInitialized ||
                 isReleased ||
-                other == null ||
-                other == lastHitCollider)
+                other == null)
             {
                 return;
             }
@@ -167,12 +258,19 @@ namespace Eclipse.Combat
                 return;
             }
 
-            lastHitCollider = other;
+            if (!hitTracker.TryRegister(
+                    damageable))
+            {
+                return;
+            }
 
             damageable.TakeDamage(
                 damageContext);
 
-            Release();
+            if (hitTracker.RemainingHits <= 0)
+            {
+                Release();
+            }
         }
 
         private static bool IsFinite(
