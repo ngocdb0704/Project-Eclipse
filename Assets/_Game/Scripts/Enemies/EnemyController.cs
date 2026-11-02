@@ -183,6 +183,7 @@ namespace Eclipse.Enemies
             }
 
             IsDead = true;
+
             nextContactDamageAttemptTime =
                 float.PositiveInfinity;
 
@@ -190,6 +191,10 @@ namespace Eclipse.Enemies
             collisionCollider.enabled = false;
 
             Died?.Invoke(this);
+
+            // Temporary pre-pooling despawn.
+            // Future enemy pooling will replace this with Pool.Release(...).
+            gameObject.SetActive(false);
         }
     }
 }

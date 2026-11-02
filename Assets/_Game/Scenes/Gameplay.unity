@@ -444,7 +444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Weapons.MagicBoltBootstrap
   magicBoltData: {fileID: 11400000, guid: a639b1c5e51df4f488b35d4dffa71134, type: 2}
-  player: {fileID: 819455814}
+  player: {fileID: 1509652121}
   enemyRegistry: {fileID: 662115437}
 --- !u!1001 &819455812
 PrefabInstance:
@@ -498,6 +498,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3927724904009270834, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
+      propertyPath: m_FlipY
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3927724904009270834, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -508,17 +516,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 160474621693999226, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
   m_PrefabInstance: {fileID: 819455812}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &819455814 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1591066937592343761, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
-  m_PrefabInstance: {fileID: 819455812}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2082dee3681469948ad7ee1a0adfa4c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Player.PlayerController
 --- !u!1 &1059041379
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,6 +580,17 @@ Transform:
   - {fileID: 481238611}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1509652121 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1591066937592343761, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
+  m_PrefabInstance: {fileID: 819455812}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2082dee3681469948ad7ee1a0adfa4c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Player.PlayerController
 --- !u!1 &2036860946
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,7 +643,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 71579d5a178a9bdb17f812d97b41e54e07589946abe6bc340f318391
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
