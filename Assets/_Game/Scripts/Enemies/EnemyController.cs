@@ -6,7 +6,9 @@ namespace Eclipse.Enemies
 {
     [RequireComponent(typeof(Health))]
     [RequireComponent(typeof(EnemyMovement))]
-    public sealed class EnemyController : MonoBehaviour
+    public sealed class EnemyController :
+    MonoBehaviour,
+    IDamageable
     {
         private const float ContactDamageRetryInterval = 0.1f;
 
@@ -116,6 +118,26 @@ namespace Eclipse.Enemies
             }
 
             movement.SetTarget(target);
+        }
+
+        public void TakeDamage(DamageContext context)
+        {
+            if (!enabled || IsDead)
+            {
+                return;
+            }
+
+            if (health == null)
+            {
+                health = GetComponent<Health>();
+            }
+
+            if (health == null)
+            {
+                return;
+            }
+
+            health.TakeDamage(context.FinalDamage);
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

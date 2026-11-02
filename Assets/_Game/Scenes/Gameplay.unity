@@ -303,6 +303,68 @@ Transform:
   - {fileID: 2036860947}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &481238610
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1276771039}
+    m_Modifications:
+    - target: {fileID: 731168347159060054, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.81515
+      objectReference: {fileID: 0}
+    - target: {fileID: 731168347159060054, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.43515
+      objectReference: {fileID: 0}
+    - target: {fileID: 731168347159060054, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 731168347159060054, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 731168347159060054, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 731168347159060054, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 731168347159060054, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 731168347159060054, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 731168347159060054, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 731168347159060054, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1547327853962648666, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+      propertyPath: m_Name
+      value: DamageNumberSpawner
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+--- !u!4 &481238611 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 731168347159060054, guid: 98401012c8d3a184abbc8cd70ee8e913, type: 3}
+  m_PrefabInstance: {fileID: 481238610}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &662115434
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,6 +376,7 @@ GameObject:
   - component: {fileID: 662115435}
   - component: {fileID: 662115437}
   - component: {fileID: 662115436}
+  - component: {fileID: 662115438}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -368,6 +431,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce5d502877b192149b61cb9717105fb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Enemies.EnemyRegistry
+--- !u!114 &662115438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662115434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ec624ee7ac3f734db97336433902c2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Weapons.MagicBoltBootstrap
+  magicBoltData: {fileID: 11400000, guid: a639b1c5e51df4f488b35d4dffa71134, type: 2}
+  player: {fileID: 819455814}
+  enemyRegistry: {fileID: 662115437}
 --- !u!1001 &819455812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -430,6 +508,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 160474621693999226, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
   m_PrefabInstance: {fileID: 819455812}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &819455814 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1591066937592343761, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
+  m_PrefabInstance: {fileID: 819455812}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2082dee3681469948ad7ee1a0adfa4c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Player.PlayerController
 --- !u!1 &1059041379
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,7 +579,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 481238611}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2036860946
