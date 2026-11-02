@@ -264,8 +264,18 @@ namespace Eclipse.Combat
                 return;
             }
 
+            Vector2 hitPosition =
+    other.ClosestPoint(
+        transform.position);
+
             damageable.TakeDamage(
                 damageContext);
+
+            DamageEvents.Raise(
+                new DamageEventData(
+                    hitPosition,
+                    damageContext.FinalDamage,
+                    damageContext.IsCritical));
 
             if (hitTracker.RemainingHits <= 0)
             {
