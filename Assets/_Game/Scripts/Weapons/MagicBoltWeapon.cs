@@ -122,19 +122,20 @@ namespace Eclipse.Weapons
                     Data.ProjectileCount +
                     projectileBonus);
 
-            DamageContext context =
-                new DamageContext(
-                    owner,
-                    damage,
-                    false,
-                    1f,
-                    direction * Data.Knockback,
-                    DamageType.Magical);
-
             for (int i = 0;
-                 i < projectileCount;
-                 i++)
+     i < projectileCount;
+     i++)
             {
+                DamageContext context =
+                    DamageCalculator.Calculate(
+                        owner,
+                        damage,
+                        RuntimeStats.CriticalChance,
+                        RuntimeStats.CriticalDamage,
+                        UnityEngine.Random.value,
+                        direction * Data.Knockback,
+                        DamageType.Magical);
+
                 Projectile projectile =
                     Instantiate(
                         projectilePrefab,
