@@ -15,7 +15,7 @@ MonoBehaviour:
   id: magic_bolt
   displayName: Magic Bolt
   icon: {fileID: 0}
-  prefab: {fileID: 0}
+  prefab: {fileID: 1872939969154968574, guid: c67ef987dd07da841866994206fe508a, type: 3}
   damage: 10
   cooldown: 1
   projectileCount: 1
