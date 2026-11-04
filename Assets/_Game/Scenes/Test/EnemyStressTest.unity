@@ -325,7 +325,7 @@ Transform:
   m_GameObject: {fileID: 876129601}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.06397, y: -1.61719, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -363,7 +363,7 @@ MonoBehaviour:
   enemyPrefab: {fileID: 6650305006575240288, guid: e1a3e0ba30a3a414285ffbb4390a8800, type: 3}
   enemyRegistry: {fileID: 876129602}
   dummyTarget: {fileID: 719599707}
-  enemyCount: 250
+  enemyCount: 500
   spawnOnStart: 1
   randomSeed: 12345
   minSpawnRadius: 12
