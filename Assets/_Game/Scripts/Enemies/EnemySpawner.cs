@@ -59,6 +59,8 @@ namespace Eclipse.Enemies
             enemyDiedHandler = HandleEnemyDied;
         }
 
+        private Transform poolRoot;
+
         private void Start()
         {
             if (enemyPrefab == null || enemyPrefab.Data == null)
@@ -72,14 +74,20 @@ namespace Eclipse.Enemies
             }
 
             Transform parent =
-                spawnParent != null
-                    ? spawnParent
-                    : transform;
+    spawnParent != null
+        ? spawnParent
+        : transform;
+
+            GameObject poolObject =
+                new GameObject($"{name} Enemy Pool");
+
+            poolRoot = poolObject.transform;
+            poolRoot.SetParent(parent, false);
 
             enemyPool =
                 new GameObjectPool<EnemyController>(
                     enemyPrefab,
-                    parent);
+                    poolRoot);
 
             enemyPool.Prewarm(
                 Mathf.Max(0, prewarmCount));
@@ -244,6 +252,12 @@ namespace Eclipse.Enemies
             }
 
             activeOwnedEnemies.Clear();
+
+            if (poolRoot != null)
+            {
+                Destroy(poolRoot.gameObject);
+                poolRoot = null;
+            }
         }
     }
 }
