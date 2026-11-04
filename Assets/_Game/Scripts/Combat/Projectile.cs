@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Eclipse.Core.Pooling;
 
 namespace Eclipse.Combat
 {
@@ -36,6 +37,13 @@ namespace Eclipse.Combat
             hitTargets.Clear();
         }
 
+        public void Clear()
+        {
+            Pierce = 0;
+            RemainingHits = 0;
+            hitTargets.Clear();
+        }
+
         public bool TryRegister(
             IDamageable target)
         {
@@ -66,7 +74,9 @@ namespace Eclipse.Combat
     }
 
     [RequireComponent(typeof(Rigidbody2D))]
-    public sealed class Projectile : MonoBehaviour
+    public sealed class Projectile :
+    MonoBehaviour,
+    IPoolable
     {
         private Rigidbody2D body;
         private Collider2D projectileCollider;
@@ -237,7 +247,11 @@ namespace Eclipse.Combat
                 return;
             }
 
-            Destroy(gameObject);
+            Debug.LogError(
+                "Projectile released without a pool release callback.",
+                this);
+
+            gameObject.SetActive(false);
         }
 
         private void OnTriggerEnter2D(
@@ -289,6 +303,48 @@ namespace Eclipse.Combat
             return
                 !float.IsNaN(value) &&
                 !float.IsInfinity(value);
+        }
+
+        public void OnSpawned()
+        {
+            Direction = Vector2.zero;
+            Speed = 0f;
+
+            remainingLifetime = 0f;
+            damageContext = default;
+            releaseCallback = null;
+
+            hitTracker.Clear();
+
+            isInitialized = false;
+            isReleased = false;
+
+            if (body != null)
+            {
+                body.linearVelocity =
+                    Vector2.zero;
+            }
+        }
+
+        public void OnDespawned()
+        {
+            Direction = Vector2.zero;
+            Speed = 0f;
+
+            remainingLifetime = 0f;
+            damageContext = default;
+            releaseCallback = null;
+
+            hitTracker.Clear();
+
+            isInitialized = false;
+            isReleased = true;
+
+            if (body != null)
+            {
+                body.linearVelocity =
+                    Vector2.zero;
+            }
         }
     }
 }
