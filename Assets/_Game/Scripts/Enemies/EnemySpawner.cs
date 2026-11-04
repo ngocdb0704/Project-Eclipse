@@ -3,6 +3,7 @@ using UnityEngine;
 using System;
 using Eclipse.Core.Pooling;
 using System.Collections.Generic;
+using Eclipse.Loot;
 
 namespace Eclipse.Enemies
 {
@@ -50,6 +51,10 @@ namespace Eclipse.Enemies
         private readonly HashSet<EnemyController>
     activeOwnedEnemies =
         new HashSet<EnemyController>();
+
+        [Header("Loot")]
+        [SerializeField]
+        private ExpGemPool expGemPool;
 
         private void Awake()
         {
@@ -205,21 +210,51 @@ namespace Eclipse.Enemies
                 Quaternion.identity);
         }
 
-        private void HandleEnemyDied(
-    EnemyController enemy)
+
+        private void HandleEnemyDied(EnemyController enemy)
         {
             if (enemy == null || enemyPool == null)
             {
                 return;
             }
 
+            // A death must only be processed once.
+            if (!activeOwnedEnemies.Remove(enemy))
+            {
+                return;
+            }
+
             enemy.Died -= enemyDiedHandler;
 
-            activeOwnedEnemies.Remove(enemy);
+            if (enemyRegistry != null)
+            {
+                enemyRegistry.Unregister(enemy);
+            }
 
-            // Defensive cleanup. If the registry already
-            // handled Died, this simply returns false.
-            enemyRegistry.Unregister(enemy);
+            // Read reward and position before returning
+            // the enemy to its pool.
+            int expReward = enemy.Data != null
+                ? enemy.Data.ExpReward
+                : 0;
+
+            Vector3 deathPosition = enemy.transform.position;
+
+            if (expReward > 0)
+            {
+                if (expGemPool != null && expGemPool.IsReady)
+                {
+                    expGemPool.Spawn(
+                        deathPosition,
+                        expReward);
+                }
+                else
+                {
+                    Debug.LogError(
+                        "EnemySpawner requires a ready " +
+                        "ExpGemPool to drop EXP.",
+                        this);
+                }
+            }
 
             if (!enemyPool.Release(enemy))
             {
@@ -228,6 +263,7 @@ namespace Eclipse.Enemies
                     enemy);
             }
         }
+
 
         private void OnDestroy()
         {
