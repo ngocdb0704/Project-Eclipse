@@ -6,8 +6,8 @@
 - Scene: Assets/_Game/Scenes/Test/EnemyStressTest.unity
 - Branch: task/047-stress-test-250-enemies
 - Unity: 6000.3.27f1
-- Measurement mode: [Editor / Development Build]
-- Test date:
+- Measurement mode: Unity Editor / Play Mode
+- Test date: 2026-11-04
 - Test duration: 60 seconds
 - Warmup: 10 seconds
 
@@ -33,29 +33,59 @@
 - Player combat: disabled
 - Damage popup workload: none
 
+
 ## Performance results
+
 | Metric | Result | Measurement source |
 |---|---:|---|
-| FPS average | TBD | |
-| FPS minimum observed | TBD | |
-| CPU frame time average (ms) | TBD | |
-| CPU frame time maximum (ms) | TBD | |
-| Main thread time (ms) | TBD | |
-| GC Alloc/frame (B) | TBD | |
-| Physics2D time (ms) | TBD | |
+| FPS (mean of 6 observed samples) | 220 FPS | Game Stats |
+| Approx. frame time derived from FPS | 4.55 ms | 1000 / 220 |
+| CPU PlayerLoop (selected frame) | 1.83 ms | CPU Usage / Hierarchy |
+| Physics2D (selected frame) | 0.28 ms | CPU Usage / Hierarchy |
+| GC allocation (selected frame) | 0 B | Memory Profiler |
+| FPS minimum observed | Not recorded | |
+| Average CPU frame time | Not measured | |
+| Maximum CPU frame time | Not measured | |
 | Active enemy count | 250 | Runtime counts |
 | Pool total count | 250 | Runtime counts |
-| Console errors | 0 expected | Console |
+| Registry count | 250 | Runtime counts |
+| Object count growth | None observed | 60-second test |
+| Console errors | 0 | Unity Console |
 
 ## Observations
-- Main bottleneck:
-- CPU spikes:
-- GC spikes:
-- Object count growth:
-- Visual/physics issues:
+
+- 250 BasicEnemy instances were active during the
+  60-second stress test.
+- The pool and registry counts remained consistent.
+- Observed FPS averaged 220 across 6 samples.
+- Selected-frame CPU PlayerLoop time was 1.83 ms.
+- Selected-frame Physics2D time was 0.28 ms.
+- Selected-frame GC allocation was 0 B.
+- No continuous object count growth was observed.
+- No console errors occurred.
+- No performance bottleneck was confirmed.
 
 ## Conclusion
-- Baseline recorded: [YES/NO]
-- Test stable for 60 seconds: [YES/NO]
-- Investigation candidates for Task 049:
+
+- Baseline recorded: YES
+- Test stable for 60 seconds: YES
+- Measurement environment: Unity Editor
+- Optimization changes: NONE
+
+### Limitations
+
+- FPS is based on six observations, not all frames
+  captured during the 60-second interval.
+- CPU, Physics2D and GC metrics are selected-frame
+  samples rather than 60-second averages.
+- Editor profiling results are not equivalent to
+  standalone Development Build performance.
+
+### Investigation candidates for Task 049
+
+- Compare CPU frame time at 500 enemies.
+- Evaluate Physics2D scaling.
+- Inspect EnemyMovement.FixedUpdate cost.
+- Inspect GC allocation and frame-time spikes.
+
 ```
