@@ -95,3 +95,29 @@ Work branches are created from `development` and named `task/NNN-description`, f
 Each task must meet its acceptance criteria and the Definition of Done before it is merged into `development`. After every 10 tasks, complete a milestone checkpoint before promoting `development` to `main`.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the authoritative branch workflow, checkpoint rule, commit guidance, and Definition of Done.
+
+
+## Performance profiling
+
+Project Eclipse includes a repeatable Unity
+Profiler checklist for performance benchmarks.
+
+See [Unity Profiler Checklist](docs/performance/ProfilerChecklist.md).
+
+Existing stress test baselines:
+
+- [250 Enemy Baseline](docs/performance/Enemy250Baseline.md)
+- [500 Enemy Baseline](docs/performance/Enemy500Baseline.md)
+
+The stress test scene is located at:
+
+`Assets/_Game/Scenes/Test/EnemyStressTest.unity`
+
+Standard benchmark:
+- 500 active enemies.
+- 10-second warmup.
+- 60-second observation window.
+- CPU, Memory, Physics2D and Rendering inspection.
+
+Task 049 optimization was deferred.
+No verified optimization gain has been recorded.
