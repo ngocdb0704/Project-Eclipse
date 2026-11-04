@@ -1,11 +1,15 @@
+
+using System;
 using System.Globalization;
+using Eclipse.Core.Pooling;
 using UnityEngine;
 
 namespace Eclipse.UI
 {
     [RequireComponent(typeof(TextMesh))]
     public sealed class DamageNumberPopup :
-        MonoBehaviour
+        MonoBehaviour,
+        IPoolable
     {
         [SerializeField, Min(0.05f)]
         private float lifetime = 0.65f;
@@ -24,22 +28,52 @@ namespace Eclipse.UI
         private float remainingLifetime;
         private bool isShowing;
 
+        private Action<DamageNumberPopup> releaseCallback;
+
         private void Awake()
         {
-            textMesh =
-                GetComponent<TextMesh>();
+            textMesh = GetComponent<TextMesh>();
 
-            baseScale =
-                transform.localScale;
+            baseScale = transform.localScale;
+            baseColor = textMesh.color;
+        }
 
-            baseColor =
-                textMesh.color;
+        public void OnSpawned()
+        {
+            ResetVisualState();
+        }
+
+        public void OnDespawned()
+        {
+            ResetVisualState();
+        }
+
+        private void ResetVisualState()
+        {
+            isShowing = false;
+            remainingLifetime = 0f;
+            releaseCallback = null;
+
+            transform.localScale = baseScale;
+
+            textMesh.text = string.Empty;
+            textMesh.fontStyle = FontStyle.Normal;
+            textMesh.color = baseColor;
         }
 
         public void Show(
             float amount,
-            bool isCritical)
+            bool isCritical,
+            Action<DamageNumberPopup> onRelease)
         {
+            if (onRelease == null)
+            {
+                throw new ArgumentNullException(
+                    nameof(onRelease));
+            }
+
+            releaseCallback = onRelease;
+
             textMesh.text =
                 amount.ToString(
                     "0.#",
@@ -52,16 +86,11 @@ namespace Eclipse.UI
 
             transform.localScale =
                 baseScale *
-                (isCritical
-                    ? criticalScale
-                    : 1f);
+                (isCritical ? criticalScale : 1f);
 
-            textMesh.color =
-                baseColor;
+            textMesh.color = baseColor;
 
-            remainingLifetime =
-                lifetime;
-
+            remainingLifetime = lifetime;
             isShowing = true;
         }
 
@@ -77,28 +106,49 @@ namespace Eclipse.UI
                 riseSpeed *
                 Time.deltaTime;
 
-            remainingLifetime -=
-                Time.deltaTime;
+            remainingLifetime -= Time.deltaTime;
 
             float normalizedLifetime =
-                lifetime > 0f
-                    ? Mathf.Clamp01(
-                        remainingLifetime /
-                        lifetime)
-                    : 0f;
+                Mathf.Clamp01(
+                    remainingLifetime / lifetime);
 
-            Color color =
-                baseColor;
+            Color color = baseColor;
+            color.a *= normalizedLifetime;
 
-            color.a *=
-                normalizedLifetime;
-
-            textMesh.color =
-                color;
+            textMesh.color = color;
 
             if (remainingLifetime <= 0f)
             {
-                Destroy(gameObject);
+                Release();
+            }
+        }
+
+        private void Release()
+        {
+            if (!isShowing)
+            {
+                return;
+            }
+
+            isShowing = false;
+            remainingLifetime = 0f;
+
+            Action<DamageNumberPopup> callback =
+                releaseCallback;
+
+            releaseCallback = null;
+
+            if (callback != null)
+            {
+                callback(this);
+            }
+            else
+            {
+                Debug.LogError(
+                    "Damage popup has no pool release callback.",
+                    this);
+
+                gameObject.SetActive(false);
             }
         }
     }
