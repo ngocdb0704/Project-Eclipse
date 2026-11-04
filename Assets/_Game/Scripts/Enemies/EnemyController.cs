@@ -1,6 +1,7 @@
 using System;
 using Eclipse.Combat;
 using UnityEngine;
+using Eclipse.Core.Pooling;
 
 namespace Eclipse.Enemies
 {
@@ -8,7 +9,8 @@ namespace Eclipse.Enemies
     [RequireComponent(typeof(EnemyMovement))]
     public sealed class EnemyController :
     MonoBehaviour,
-    IDamageable
+    IDamageable,
+    IPoolable
     {
         private const float ContactDamageRetryInterval = 0.1f;
 
@@ -18,6 +20,8 @@ namespace Eclipse.Enemies
         private Health health;
         private EnemyMovement movement;
         private Collider2D collisionCollider;
+
+        private bool hasBeenSpawnedFromPool;
 
         private int playerLayer;
         private float nextContactDamageAttemptTime;
@@ -88,11 +92,13 @@ namespace Eclipse.Enemies
 
         private void Start()
         {
-            if (!enabled)
+            if (!enabled || hasBeenSpawnedFromPool)
             {
                 return;
             }
 
+            // Preserve initialization for standalone,
+            // non-pooled enemies used by existing tests.
             IsDead = false;
             nextContactDamageAttemptTime = 0f;
 
@@ -192,9 +198,35 @@ namespace Eclipse.Enemies
 
             Died?.Invoke(this);
 
-            // Temporary pre-pooling despawn.
-            // Future enemy pooling will replace this with Pool.Release(...).
-            gameObject.SetActive(false);
+            // Fallback for enemies not managed by a pool.
+            // Pooled enemies have already been released
+            // by EnemySpawner's Died listener.
+            if (gameObject.activeSelf)
+            {
+                gameObject.SetActive(false);
+            }
+        }
+
+        public void OnSpawned()
+        {
+            hasBeenSpawnedFromPool = true;
+
+            IsDead = false;
+            nextContactDamageAttemptTime = 0f;
+
+            // Clear previous chase and velocity.
+            movement.Stop();
+
+            // Restore minimum state required for reuse.
+            health.Initialize(enemyData.MaxHP);
+            collisionCollider.enabled = true;
+            movement.Initialize(enemyData.MoveSpeed);
+        }
+
+        public void OnDespawned()
+        {
+            movement.Stop();
+            collisionCollider.enabled = false;
         }
     }
 }

@@ -1,5 +1,7 @@
 using Eclipse.World;
 using UnityEngine;
+using System;
+using Eclipse.Core.Pooling;
 
 namespace Eclipse.Enemies
 {
@@ -36,9 +38,46 @@ namespace Eclipse.Enemies
         private System.Random random;
         private float spawnTimer;
 
+        [Header("Pooling")]
+        [SerializeField, Min(0)]
+        private int prewarmCount = 16;
+
+        private GameObjectPool<EnemyController> enemyPool;
+
+        private Action<EnemyController> enemyDiedHandler;
+
         private void Awake()
         {
             random = new System.Random(randomSeed);
+
+            // Cached once; no new delegate per enemy spawn.
+            enemyDiedHandler = HandleEnemyDied;
+        }
+
+        private void Start()
+        {
+            if (enemyPrefab == null || enemyPrefab.Data == null)
+            {
+                Debug.LogError(
+                    "EnemySpawner requires a valid Enemy prefab.",
+                    this);
+
+                enabled = false;
+                return;
+            }
+
+            Transform parent =
+                spawnParent != null
+                    ? spawnParent
+                    : transform;
+
+            enemyPool =
+                new GameObjectPool<EnemyController>(
+                    enemyPrefab,
+                    parent);
+
+            enemyPool.Prewarm(
+                Mathf.Max(0, prewarmCount));
         }
 
         private void OnEnable()
@@ -60,6 +99,8 @@ namespace Eclipse.Enemies
 
             spawnMargin =
                 Mathf.Max(0f, spawnMargin);
+
+            prewarmCount = Mathf.Max(0, prewarmCount);
         }
 
         private void Update()
@@ -95,6 +136,7 @@ namespace Eclipse.Enemies
                 playerTarget != null &&
                 playerTarget.gameObject.activeInHierarchy &&
                 enemyRegistry != null &&
+                enemyPool != null &&
                 enemyRegistry.isActiveAndEnabled;
         }
 
@@ -121,21 +163,53 @@ namespace Eclipse.Enemies
                     random);
 
             EnemyController enemy =
-                CreateEnemy(spawnPosition);
+    CreateEnemy(spawnPosition);
 
             enemy.Initialize(playerTarget);
 
-            enemyRegistry.Register(enemy);
+            if (!enemyRegistry.Register(enemy))
+            {
+                Debug.LogError(
+                    "Failed to register pooled enemy.",
+                    enemy);
+
+                enemyPool.Release(enemy);
+                return;
+            }
+
+            // Register first, then subscribe to death.
+            // Registry must unregister before pool release.
+            enemy.Died += enemyDiedHandler;
         }
 
         private EnemyController CreateEnemy(
-            Vector2 spawnPosition)
+    Vector2 spawnPosition)
         {
-            return Instantiate(
-                enemyPrefab,
+            return enemyPool.Get(
                 spawnPosition,
-                Quaternion.identity,
-                spawnParent);
+                Quaternion.identity);
+        }
+
+        private void HandleEnemyDied(
+    EnemyController enemy)
+        {
+            if (enemy == null || enemyPool == null)
+            {
+                return;
+            }
+
+            enemy.Died -= enemyDiedHandler;
+
+            // Defensive cleanup. If the registry already
+            // handled Died, this simply returns false.
+            enemyRegistry.Unregister(enemy);
+
+            if (!enemyPool.Release(enemy))
+            {
+                Debug.LogError(
+                    "Enemy pool rejected release.",
+                    enemy);
+            }
         }
     }
 }
