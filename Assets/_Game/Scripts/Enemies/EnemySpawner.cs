@@ -2,6 +2,7 @@ using Eclipse.World;
 using UnityEngine;
 using System;
 using Eclipse.Core.Pooling;
+using System.Collections.Generic;
 
 namespace Eclipse.Enemies
 {
@@ -46,6 +47,10 @@ namespace Eclipse.Enemies
 
         private Action<EnemyController> enemyDiedHandler;
 
+        private readonly HashSet<EnemyController>
+    activeOwnedEnemies =
+        new HashSet<EnemyController>();
+
         private void Awake()
         {
             random = new System.Random(randomSeed);
@@ -53,6 +58,8 @@ namespace Eclipse.Enemies
             // Cached once; no new delegate per enemy spawn.
             enemyDiedHandler = HandleEnemyDied;
         }
+
+        private Transform poolRoot;
 
         private void Start()
         {
@@ -67,14 +74,20 @@ namespace Eclipse.Enemies
             }
 
             Transform parent =
-                spawnParent != null
-                    ? spawnParent
-                    : transform;
+    spawnParent != null
+        ? spawnParent
+        : transform;
+
+            GameObject poolObject =
+                new GameObject($"{name} Enemy Pool");
+
+            poolRoot = poolObject.transform;
+            poolRoot.SetParent(parent, false);
 
             enemyPool =
                 new GameObjectPool<EnemyController>(
                     enemyPrefab,
-                    parent);
+                    poolRoot);
 
             enemyPool.Prewarm(
                 Mathf.Max(0, prewarmCount));
@@ -180,6 +193,8 @@ namespace Eclipse.Enemies
             // Register first, then subscribe to death.
             // Registry must unregister before pool release.
             enemy.Died += enemyDiedHandler;
+
+            activeOwnedEnemies.Add(enemy);
         }
 
         private EnemyController CreateEnemy(
@@ -200,6 +215,8 @@ namespace Eclipse.Enemies
 
             enemy.Died -= enemyDiedHandler;
 
+            activeOwnedEnemies.Remove(enemy);
+
             // Defensive cleanup. If the registry already
             // handled Died, this simply returns false.
             enemyRegistry.Unregister(enemy);
@@ -209,6 +226,37 @@ namespace Eclipse.Enemies
                 Debug.LogError(
                     "Enemy pool rejected release.",
                     enemy);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            foreach (EnemyController enemy in activeOwnedEnemies)
+            {
+                if (enemy == null)
+                {
+                    continue;
+                }
+
+                enemy.Died -= enemyDiedHandler;
+
+                if (enemyRegistry != null)
+                {
+                    enemyRegistry.Unregister(enemy);
+                }
+
+                if (enemyPool != null)
+                {
+                    enemyPool.Release(enemy);
+                }
+            }
+
+            activeOwnedEnemies.Clear();
+
+            if (poolRoot != null)
+            {
+                Destroy(poolRoot.gameObject);
+                poolRoot = null;
             }
         }
     }
