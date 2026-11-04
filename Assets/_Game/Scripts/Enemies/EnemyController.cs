@@ -36,6 +36,8 @@ namespace Eclipse.Enemies
 
         public event Action<EnemyController> Died;
 
+        private bool healthDeathSubscribed;
+
         private void Awake()
         {
             health = GetComponent<Health>();
@@ -76,18 +78,38 @@ namespace Eclipse.Enemies
 
         private void OnEnable()
         {
-            if (health != null)
+            if (health == null || healthDeathSubscribed)
             {
-                health.Died += HandleDeath;
+                return;
             }
+
+            health.Died += HandleDeath;
+            healthDeathSubscribed = true;
         }
 
         private void OnDisable()
         {
+            UnsubscribeFromHealth();
+        }
+
+        private void OnDestroy()
+        {
+            UnsubscribeFromHealth();
+        }
+
+        private void UnsubscribeFromHealth()
+        {
+            if (!healthDeathSubscribed)
+            {
+                return;
+            }
+
             if (health != null)
             {
                 health.Died -= HandleDeath;
             }
+
+            healthDeathSubscribed = false;
         }
 
         private void Start()
@@ -128,7 +150,7 @@ namespace Eclipse.Enemies
 
         public void TakeDamage(DamageContext context)
         {
-            if (!enabled || IsDead)
+            if (!isActiveAndEnabled || IsDead)
             {
                 return;
             }
@@ -214,17 +236,23 @@ namespace Eclipse.Enemies
             IsDead = false;
             nextContactDamageAttemptTime = 0f;
 
-            // Clear previous chase and velocity.
+            // Clears target and Rigidbody2D velocity.
             movement.Stop();
 
-            // Restore minimum state required for reuse.
+            // Restores health and clears damage immunity.
             health.Initialize(enemyData.MaxHP);
+            health.ConfigureInvulnerability(0f);
+
             collisionCollider.enabled = true;
             movement.Initialize(enemyData.MoveSpeed);
         }
 
         public void OnDespawned()
         {
+            IsDead = true;
+            nextContactDamageAttemptTime =
+                float.PositiveInfinity;
+
             movement.Stop();
             collisionCollider.enabled = false;
         }

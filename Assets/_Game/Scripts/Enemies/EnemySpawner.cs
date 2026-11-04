@@ -2,6 +2,7 @@ using Eclipse.World;
 using UnityEngine;
 using System;
 using Eclipse.Core.Pooling;
+using System.Collections.Generic;
 
 namespace Eclipse.Enemies
 {
@@ -45,6 +46,10 @@ namespace Eclipse.Enemies
         private GameObjectPool<EnemyController> enemyPool;
 
         private Action<EnemyController> enemyDiedHandler;
+
+        private readonly HashSet<EnemyController>
+    activeOwnedEnemies =
+        new HashSet<EnemyController>();
 
         private void Awake()
         {
@@ -180,6 +185,8 @@ namespace Eclipse.Enemies
             // Register first, then subscribe to death.
             // Registry must unregister before pool release.
             enemy.Died += enemyDiedHandler;
+
+            activeOwnedEnemies.Add(enemy);
         }
 
         private EnemyController CreateEnemy(
@@ -200,6 +207,8 @@ namespace Eclipse.Enemies
 
             enemy.Died -= enemyDiedHandler;
 
+            activeOwnedEnemies.Remove(enemy);
+
             // Defensive cleanup. If the registry already
             // handled Died, this simply returns false.
             enemyRegistry.Unregister(enemy);
@@ -210,6 +219,31 @@ namespace Eclipse.Enemies
                     "Enemy pool rejected release.",
                     enemy);
             }
+        }
+
+        private void OnDestroy()
+        {
+            foreach (EnemyController enemy in activeOwnedEnemies)
+            {
+                if (enemy == null)
+                {
+                    continue;
+                }
+
+                enemy.Died -= enemyDiedHandler;
+
+                if (enemyRegistry != null)
+                {
+                    enemyRegistry.Unregister(enemy);
+                }
+
+                if (enemyPool != null)
+                {
+                    enemyPool.Release(enemy);
+                }
+            }
+
+            activeOwnedEnemies.Clear();
         }
     }
 }
