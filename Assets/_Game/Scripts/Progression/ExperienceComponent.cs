@@ -6,18 +6,19 @@ namespace Eclipse.Progression
 {
     public sealed class ExperienceComponent : MonoBehaviour
     {
-        // Temporary flat threshold for Task 054.
-        // Task 055 will introduce a configurable EXP curve.
-        [SerializeField, Min(1)]
-        private int xpPerLevel = 10;
+        [SerializeField]
+        private ExperienceCurve curve = new ExperienceCurve();
 
         public int Level { get; private set; } = 1;
         public int CurrentXP { get; private set; }
 
-        public int RequiredXP => Mathf.Max(1, xpPerLevel);
+        public int RequiredXP => ActiveCurve.GetRequiredXP(Level);
 
         // Parameters: level, current XP, required XP.
         public event Action<int, int, int> ExperienceChanged;
+
+        private ExperienceCurve ActiveCurve =>
+            curve ?? (curve = new ExperienceCurve());
 
         public void AddExperience(int amount)
         {
@@ -29,31 +30,39 @@ namespace Eclipse.Progression
             }
 
             if (amount == 0)
-            {
                 return;
-            }
 
-            // Use long to avoid overflow during addition.
-            long totalXP = (long)CurrentXP + amount;
-            int requirement = RequiredXP;
+            long remainingXP = (long)CurrentXP + amount;
+            int nextLevel = Level;
 
-            // A constant requirement allows calculating
-            // multiple level-ups without a long loop.
-            long levelsGained = totalXP / requirement;
+            ExperienceCurve activeCurve = ActiveCurve;
 
-            if (levelsGained > int.MaxValue - (long)Level)
+            // A single gain can cross multiple level thresholds.
+            while (true)
             {
-                throw new OverflowException(
-                    "Experience level exceeds the supported range.");
+                int required = activeCurve.GetRequiredXP(nextLevel);
+
+                if (remainingXP < required)
+                    break;
+
+                if (nextLevel == int.MaxValue)
+                {
+                    throw new OverflowException(
+                        "Experience level exceeds the supported range.");
+                }
+
+                remainingXP -= required;
+                nextLevel++;
             }
 
-            Level += (int)levelsGained;
-            CurrentXP = (int)(totalXP % requirement);
+            // Commit state only after calculations succeed.
+            Level = nextLevel;
+            CurrentXP = (int)remainingXP;
 
             ExperienceChanged?.Invoke(
                 Level,
                 CurrentXP,
-                requirement);
+                RequiredXP);
         }
     }
 }
