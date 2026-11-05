@@ -17,6 +17,9 @@ namespace Eclipse.Progression
         // Parameters: level, current XP, required XP.
         public event Action<int, int, int> ExperienceChanged;
 
+        // Raised once for each level gained.
+        public event Action<int> LevelUp;
+
         private ExperienceCurve ActiveCurve =>
             curve ?? (curve = new ExperienceCurve());
 
@@ -33,6 +36,8 @@ namespace Eclipse.Progression
                 return;
 
             long remainingXP = (long)CurrentXP + amount;
+
+            int previousLevel = Level;
             int nextLevel = Level;
 
             ExperienceCurve activeCurve = ActiveCurve;
@@ -55,14 +60,31 @@ namespace Eclipse.Progression
                 nextLevel++;
             }
 
-            // Commit state only after calculations succeed.
+
+            /*
+             * Commit the final state before notifying subscribers.
+             * This prevents listeners from observing partially
+             * calculated experience values.
+             */
             Level = nextLevel;
             CurrentXP = (int)remainingXP;
 
+            // Preserve Task 054/055 behavior:
+            // one experience event per successful addition.
             ExperienceChanged?.Invoke(
                 Level,
                 CurrentXP,
                 RequiredXP);
+
+            // Notify each level gained, in ascending order.
+            int levelsGained = nextLevel - previousLevel;
+
+            for (int i = 0; i < levelsGained; i++)
+            {
+                int reachedLevel = previousLevel + i + 1;
+                LevelUp?.Invoke(reachedLevel);
+            }
+
         }
     }
 }
