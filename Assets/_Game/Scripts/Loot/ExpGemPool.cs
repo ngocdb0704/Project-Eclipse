@@ -27,6 +27,8 @@ namespace Eclipse.Loot
         public int CountAll =>
             pool != null ? pool.CountAll : 0;
 
+        public event Action<int> ExperienceCollected;
+
         private void Awake()
         {
             if (gemPrefab == null)
@@ -73,9 +75,10 @@ namespace Eclipse.Loot
             }
 
             ExpGem gem = pool.Get(
-                worldPosition,
-                Quaternion.identity);
+    worldPosition,
+    Quaternion.identity);
 
+            gem.BindPool(this);
             gem.Initialize(expValue);
 
             return gem;
@@ -91,6 +94,26 @@ namespace Eclipse.Loot
         {
             prewarmCount =
                 Mathf.Max(0, prewarmCount);
+        }
+
+        internal void Collect(ExpGem gem, int expValue)
+        {
+            if (gem == null || expValue <= 0 || pool == null)
+                return;
+
+            try
+            {
+                ExperienceCollected?.Invoke(expValue);
+            }
+            finally
+            {
+                if (!Release(gem))
+                {
+                    Debug.LogError(
+                        "Failed to release collected EXP gem.",
+                        this);
+                }
+            }
         }
     }
 }
