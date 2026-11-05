@@ -377,6 +377,8 @@ GameObject:
   - component: {fileID: 662115437}
   - component: {fileID: 662115436}
   - component: {fileID: 662115438}
+  - component: {fileID: 662115440}
+  - component: {fileID: 662115439}
   m_Layer: 0
   m_Name: Systems
   m_TagString: Untagged
@@ -449,6 +451,34 @@ MonoBehaviour:
   magicBoltData: {fileID: 11400000, guid: a639b1c5e51df4f488b35d4dffa71134, type: 2}
   player: {fileID: 1509652121}
   enemyRegistry: {fileID: 662115437}
+--- !u!114 &662115439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662115434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2c86f294ebce8d4e8f7cf50a0b426c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Progression.LevelUpPauseController
+  gemPool: {fileID: 1764109793}
+  experience: {fileID: 1509652122}
+  gameState: {fileID: 662115440}
+  levelUpPanel: {fileID: 0}
+--- !u!114 &662115440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662115434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa290fdad0683b7489bb205d268b2916, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Eclipse.Core::Eclipse.Core.StateMachine.GameplayStateMachine
 --- !u!1001 &819455812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -512,11 +542,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1664795142671487916, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1509652122}
   m_SourcePrefab: {fileID: 100100000, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
 --- !u!4 &819455813 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 160474621693999226, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
+  m_PrefabInstance: {fileID: 819455812}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &819455814 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1664795142671487916, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
   m_PrefabInstance: {fileID: 819455812}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1059041379
@@ -588,12 +626,27 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1591066937592343761, guid: 5b54b022845a6e24c9511b62849e085a, type: 3}
   m_PrefabInstance: {fileID: 819455812}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 819455814}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2082dee3681469948ad7ee1a0adfa4c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Player.PlayerController
+--- !u!114 &1509652122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 819455814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4944ae49bfc651e4ca633009ad479e9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Progression.ExperienceComponent
+  curve:
+    baseXP: 10
+    exponent: 1.3
 --- !u!1001 &1764109792
 PrefabInstance:
   m_ObjectHideFlags: 0
