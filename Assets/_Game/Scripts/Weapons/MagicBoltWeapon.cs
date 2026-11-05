@@ -131,11 +131,7 @@ namespace Eclipse.Weapons
                 direction.Normalize();
             }
 
-            float damage =
-                Mathf.Max(
-                    0f,
-                    Data.Damage *
-                    RuntimeStats.DamageMultiplier);
+            float damage = EffectiveDamage;
 
             float speed =
                 Mathf.Max(
@@ -143,17 +139,7 @@ namespace Eclipse.Weapons
                     Data.ProjectileSpeed *
                     RuntimeStats.ProjectileSpeed);
 
-            int projectileBonus =
-                Mathf.Max(
-                    0,
-                    RuntimeStats.ProjectileCount -
-                    PlayerStats.DefaultProjectileCount);
-
-            int projectileCount =
-                Mathf.Max(
-                    1,
-                    Data.ProjectileCount +
-                    projectileBonus);
+            int projectileCount = EffectiveProjectileCount;
 
             for (int i = 0;
      i < projectileCount;
