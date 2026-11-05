@@ -25,6 +25,12 @@ namespace Eclipse.Player
         private Rigidbody2D body;
         private Vector2 moveInput;
 
+        public static PlayerController ActiveInstance
+        {
+            get;
+            private set;
+        }
+
         private void Awake()
         {
             body = GetComponent<Rigidbody2D>();
@@ -66,10 +72,18 @@ namespace Eclipse.Player
             }
 
             moveAction.action.Enable();
+
+            ActiveInstance = this;
         }
 
         private void OnDisable()
         {
+
+            if (ActiveInstance == this)
+            {
+                ActiveInstance = null;
+            }
+
             if (moveAction != null)
             {
                 moveAction.action.Disable();

@@ -7,8 +7,9 @@ using UnityEngine;
 namespace Eclipse.Loot
 {
     [RequireComponent(
-        typeof(SpriteRenderer),
-        typeof(CircleCollider2D))]
+    typeof(SpriteRenderer),
+    typeof(CircleCollider2D),
+    typeof(Rigidbody2D))]
     public sealed class ExpGem : MonoBehaviour, IPoolable
     {
         private SpriteRenderer spriteRenderer;
@@ -23,6 +24,12 @@ namespace Eclipse.Loot
         public int ExpValue { get; private set; }
         public bool IsInitialized { get; private set; }
 
+        [SerializeField, Min(0f)]
+        private float magnetSpeed = 8f;
+
+        private Rigidbody2D body;
+        private bool magnetized;
+
         private void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
@@ -30,6 +37,8 @@ namespace Eclipse.Loot
 
             initialColor = spriteRenderer.color;
             initialScale = transform.localScale;
+
+            body = GetComponent<Rigidbody2D>();
 
             playerLayer = LayerMask.NameToLayer("Player");
 
@@ -110,6 +119,13 @@ namespace Eclipse.Loot
             collected = false;
             ownerPool = null;
 
+            magnetized = false;
+
+            if (body != null)
+            {
+                body.linearVelocity = Vector2.zero;
+            }
+
             if (pickupCollider != null)
                 pickupCollider.enabled = false;
 
@@ -118,5 +134,69 @@ namespace Eclipse.Loot
 
             transform.localScale = initialScale;
         }
+
+
+        private void FixedUpdate()
+        {
+            if (!IsInitialized || collected)
+            {
+                return;
+            }
+
+            PlayerController player = PlayerController.ActiveInstance;
+
+            // Stop attracting if the player is disabled or dead.
+            if (player == null ||
+                !player.isActiveAndEnabled ||
+                player.Stats == null ||
+                player.Health == null ||
+                player.Health.IsDead)
+            {
+                if (magnetized)
+                {
+                    magnetized = false;
+                    body.linearVelocity = Vector2.zero;
+                }
+
+                return;
+            }
+
+            Vector2 targetPosition = player.transform.position;
+
+            // Detect pickup range before starting attraction.
+            if (!magnetized)
+            {
+                float radius = Mathf.Max(
+                    0f,
+                    player.Stats.PickupRadius);
+
+                if (radius <= 0f)
+                {
+                    return;
+                }
+
+                Vector2 offset = targetPosition - body.position;
+
+                if (offset.sqrMagnitude > radius * radius)
+                {
+                    return;
+                }
+
+                magnetized = true;
+            }
+
+            if (magnetSpeed <= 0f)
+            {
+                return;
+            }
+
+            Vector2 nextPosition = Vector2.MoveTowards(
+                body.position,
+                targetPosition,
+                magnetSpeed * Time.fixedDeltaTime);
+
+            body.MovePosition(nextPosition);
+        }
+
     }
 }
