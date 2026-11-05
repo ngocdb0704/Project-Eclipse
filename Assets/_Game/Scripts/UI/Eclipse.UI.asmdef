@@ -1,17 +1,18 @@
 {
-  "name": "Eclipse.UI",
-  "rootNamespace": "Eclipse.UI",
-  "references": [
-    "Eclipse.Core",
-    "Eclipse.Gameplay"
-  ],
-  "includePlatforms": [],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": false,
-  "precompiledReferences": [],
-  "autoReferenced": true,
-  "defineConstraints": [],
-  "versionDefines": [],
-  "noEngineReferences": false
+    "name": "Eclipse.UI",
+    "rootNamespace": "Eclipse.UI",
+    "references": [
+        "Eclipse.Core",
+        "Eclipse.Gameplay",
+        "UnityEngine.UI"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
