@@ -1,3 +1,5 @@
+using System;
+
 namespace Eclipse.Player
 {
     /// <summary>
@@ -107,5 +109,39 @@ namespace Eclipse.Player
             DurationMultiplier = DefaultDurationMultiplier;
             Luck = DefaultLuck;
         }
+
+
+        public void AddDamageMultiplier(float amount)
+        {
+            if (float.IsNaN(amount) ||
+                float.IsInfinity(amount) ||
+                amount < 0f)
+            {
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            }
+
+            if (DamageMultiplier > float.MaxValue - amount)
+            {
+                throw new OverflowException(
+                    "Damage multiplier exceeds the supported range.");
+            }
+
+            DamageMultiplier += amount;
+        }
+
+        public void AddCooldownReduction(float amount)
+        {
+            if (float.IsNaN(amount) ||
+                float.IsInfinity(amount) ||
+                amount < 0f)
+            {
+                throw new ArgumentOutOfRangeException(nameof(amount));
+            }
+
+            CooldownReduction = Math.Min(
+                1f,
+                CooldownReduction + amount);
+        }
+
     }
 }
