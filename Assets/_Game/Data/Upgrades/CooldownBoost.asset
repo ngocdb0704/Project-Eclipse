@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Progression.UpgradeData
   id: cooldown_boost
   displayName: Cooldown Boost
-  description: 
+  description: Reduce weapon cooldown by 5% per upgrade level.
   icon: {fileID: 0}
-  rarity: 0
+  rarity: 1
   maxLevel: 3
   requiredPlayerLevel: 1
   prerequisites: []
