@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8e1dbee5b1ae9247b0c91ad1f80fd4f, type: 3}
+  m_Name: CooldownBoost
+  m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Progression.UpgradeData
+  id: cooldown_boost
+  displayName: Cooldown Boost
+  description: 
+  icon: {fileID: 0}
+  rarity: 0
+  maxLevel: 3
+  requiredPlayerLevel: 1
+  prerequisites: []
+  effectType: 1
+  valuePerLevel: 0.05
