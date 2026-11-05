@@ -273,5 +273,84 @@ namespace Eclipse.Tests.EditMode
             Assert.GreaterOrEqual(reportedXP, 0);
             Assert.Less(reportedXP, reportedRequirement);
         }
+
+
+        [Test]
+        public void ExactThreshold_RaisesLevelUpOnce()
+        {
+            int eventCount = 0;
+            int reachedLevel = 0;
+
+            experience.LevelUp += level =>
+            {
+                eventCount++;
+                reachedLevel = level;
+            };
+
+            experience.AddExperience(10);
+
+            Assert.AreEqual(1, eventCount);
+            Assert.AreEqual(2, reachedLevel);
+            Assert.AreEqual(2, experience.Level);
+        }
+
+        [Test]
+        public void MultipleLevelUps_RaiseOrderedEvents()
+        {
+            var reachedLevels = new System.Collections.Generic.List<int>();
+
+            experience.LevelUp += level =>
+                reachedLevels.Add(level);
+
+            experience.AddExperience(53);
+
+            CollectionAssert.AreEqual(
+                new[] { 2, 3 },
+                reachedLevels);
+
+            Assert.AreEqual(3, experience.Level);
+            Assert.AreEqual(18, experience.CurrentXP);
+        }
+
+        [Test]
+        public void BelowThreshold_DoesNotRaiseLevelUp()
+        {
+            int eventCount = 0;
+
+            experience.LevelUp += _ => eventCount++;
+
+            experience.AddExperience(5);
+            experience.AddExperience(0);
+
+            Assert.AreEqual(0, eventCount);
+            Assert.AreEqual(1, experience.Level);
+            Assert.AreEqual(5, experience.CurrentXP);
+        }
+
+        [Test]
+        public void LevelUp_DoesNotDuplicateAcrossGains()
+        {
+            var reachedLevels = new System.Collections.Generic.List<int>();
+            int experienceChangedCount = 0;
+
+            experience.LevelUp += level =>
+                reachedLevels.Add(level);
+
+            experience.ExperienceChanged +=
+                (_, _, _) => experienceChangedCount++;
+
+            experience.AddExperience(10);
+            experience.AddExperience(5);
+            experience.AddExperience(20);
+
+            CollectionAssert.AreEqual(
+                new[] { 2, 3 },
+                reachedLevels);
+
+            Assert.AreEqual(3, experienceChangedCount);
+            Assert.AreEqual(3, experience.Level);
+            Assert.AreEqual(0, experience.CurrentXP);
+        }
+
     }
 }
