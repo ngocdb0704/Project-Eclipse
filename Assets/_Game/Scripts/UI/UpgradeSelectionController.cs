@@ -248,6 +248,12 @@ namespace Eclipse.UI
                             upgrade.ValuePerLevel);
                         break;
 
+
+                    case UpgradeEffectType.ProjectileCount:
+                        stats.AddProjectileCount(
+                            upgrade.ProjectilesPerLevel);
+                        break;
+
                     default:
                         Debug.LogError(
                             $"Unsupported upgrade effect: {upgrade.EffectType}",
@@ -264,11 +270,14 @@ namespace Eclipse.UI
 
             ownedLevels[upgrade.Id] = currentLevel + 1;
 
+
             Debug.Log(
                 $"Applied {upgrade.Id} Level {currentLevel + 1}. " +
                 $"Damage={stats.DamageMultiplier:F2}, " +
-                $"CooldownReduction={stats.CooldownReduction:F2}",
+                $"CooldownReduction={stats.CooldownReduction:F2}, " +
+                $"Projectiles={stats.ProjectileCount}",
                 this);
+
 
             return true;
         }

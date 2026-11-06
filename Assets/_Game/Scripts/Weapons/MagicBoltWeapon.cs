@@ -21,6 +21,10 @@ namespace Eclipse.Weapons
 
         private const int ProjectilePoolPrewarmCount = 32;
 
+
+        private const float DegreesPerProjectile = 12f;
+        private const float MaximumFanAngle = 60f;
+
         private GameObjectPool<Projectile> projectilePool;
 
         private Action<Projectile> projectileReleaseCallback;
@@ -141,10 +145,24 @@ namespace Eclipse.Weapons
 
             int projectileCount = EffectiveProjectileCount;
 
-            for (int i = 0;
-     i < projectileCount;
-     i++)
+
+            float angleStep = projectileCount > 1
+                ? Mathf.Min(
+                    DegreesPerProjectile,
+                    MaximumFanAngle / (projectileCount - 1))
+                : 0f;
+
+            float firstAngle =
+                -0.5f * (projectileCount - 1) * angleStep;
+
+            for (int i = 0; i < projectileCount; i++)
             {
+                float angle = firstAngle + i * angleStep;
+
+                Vector2 shotDirection = (Vector2)(
+                    Quaternion.Euler(0f, 0f, angle) *
+                    (Vector3)direction);
+
                 DamageContext context =
                     DamageCalculator.Calculate(
                         owner,
@@ -152,22 +170,22 @@ namespace Eclipse.Weapons
                         RuntimeStats.CriticalChance,
                         RuntimeStats.CriticalDamage,
                         UnityEngine.Random.value,
-                        direction * Data.Knockback,
+                        shotDirection * Data.Knockback,
                         DamageType.Magical);
 
-                Projectile projectile =
-    projectilePool.Get(
-        origin,
-        Quaternion.identity);
+                Projectile projectile = projectilePool.Get(
+                    origin,
+                    Quaternion.identity);
 
                 projectile.Initialize(
-    direction,
-    speed,
-    projectileLifetime,
-    context,
-    Data.Pierce,
-    projectileReleaseCallback);
+                    shotDirection,
+                    speed,
+                    projectileLifetime,
+                    context,
+                    Data.Pierce,
+                    projectileReleaseCallback);
             }
+
 
             return true;
         }

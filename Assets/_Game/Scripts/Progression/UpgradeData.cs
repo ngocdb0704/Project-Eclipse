@@ -11,11 +11,14 @@ namespace Eclipse.Progression
         Epic = 3
     }
 
+
     public enum UpgradeEffectType
     {
         DamageMultiplier = 0,
-        CooldownReduction = 1
+        CooldownReduction = 1,
+        ProjectileCount = 2
     }
+
 
     [CreateAssetMenu(
         fileName = "NewUpgrade",
@@ -60,6 +63,12 @@ namespace Eclipse.Progression
         [SerializeField, Min(0f)]
         private float valuePerLevel = 0.1f;
 
+
+        [Header("Projectile Count Effect")]
+        [SerializeField, Min(1)]
+        private int projectilesPerLevel = 1;
+
+
         public string Id => id;
         public string DisplayName => displayName;
         public string Description => description;
@@ -73,5 +82,10 @@ namespace Eclipse.Progression
 
         public UpgradeEffectType EffectType => effectType;
         public float ValuePerLevel => valuePerLevel;
+
+
+        public int ProjectilesPerLevel =>
+            Mathf.Max(1, projectilesPerLevel);
+
     }
 }

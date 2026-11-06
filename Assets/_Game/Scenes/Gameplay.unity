@@ -628,6 +628,7 @@ MonoBehaviour:
   availableUpgrades:
   - {fileID: 11400000, guid: d526359ee884a13439faa3f2b4ad1f7a, type: 2}
   - {fileID: 11400000, guid: 6cc75a7f1d743084a98bd581fb51db07, type: 2}
+  - {fileID: 11400000, guid: 1a2bc8767a18bd444b7fca8e0a11570d, type: 2}
   optionCards:
   - {fileID: 1897164570}
   - {fileID: 670601132}
