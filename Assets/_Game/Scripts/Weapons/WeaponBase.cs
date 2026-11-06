@@ -9,6 +9,9 @@ namespace Eclipse.Weapons
     {
         private const float MinimumAttackSpeedMultiplier = 0.01f;
 
+        private const float MaximumCooldownReduction = 0.90f;
+        private const float MinimumEffectiveCooldown = 0.05f;
+
         private WeaponData data;
         private PlayerStats playerStats;
         private float cooldownRemaining;
@@ -69,6 +72,7 @@ namespace Eclipse.Weapons
             }
         }
 
+
         public float EffectiveCooldown
         {
             get
@@ -83,16 +87,20 @@ namespace Eclipse.Weapons
                     MinimumAttackSpeedMultiplier,
                     playerStats.AttackSpeedMultiplier);
 
-                float cooldownReduction =
-                    Mathf.Clamp01(
-                        playerStats.CooldownReduction);
-
-                return Mathf.Max(
+                float cooldownReduction = Mathf.Clamp(
+                    playerStats.CooldownReduction,
                     0f,
+                    MaximumCooldownReduction);
+
+                float calculatedCooldown =
                     baseCooldown *
                     CurrentLevelStats.CooldownMultiplier *
                     (1f - cooldownReduction) /
-                    attackSpeed);
+                    attackSpeed;
+
+                return Mathf.Max(
+                    MinimumEffectiveCooldown,
+                    calculatedCooldown);
             }
         }
 
