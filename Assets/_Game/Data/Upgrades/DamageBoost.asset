@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Eclipse.Gameplay::Eclipse.Progression.UpgradeData
   id: damage_boost
   displayName: Damage Boost
-  description: Increase weapon damage by 10% per upgrade level.
+  description: 'Increase all weapon damage by 10% per level.
+
+    Stacks additively,
+    up to +50%.'
   icon: {fileID: 0}
   rarity: 0
   maxLevel: 5
