@@ -143,5 +143,25 @@ namespace Eclipse.Player
                 CooldownReduction + amount);
         }
 
+        
+public void AddProjectileCount(int amount)
+{
+    if (amount <= 0)
+    {
+        throw new ArgumentOutOfRangeException(
+            nameof(amount),
+            "Projectile count increase must be positive.");
+    }
+
+    if (ProjectileCount > int.MaxValue - amount)
+    {
+        throw new OverflowException(
+            "Projectile count exceeds the supported range.");
+    }
+
+    ProjectileCount += amount;
+}
+
+
     }
 }
